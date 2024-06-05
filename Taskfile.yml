@@ -1,0 +1,24 @@
+version: '3'
+
+tasks:
+  build:
+    sources:
+      - main.go
+      - go.mod
+      - go.sum
+      - cmd/**/*.go
+    generates:
+      - build/muddle
+    cmds:
+      - cmd: go build -o build/muddle.exe
+        platforms: [windows]
+      - cmd: go build -o build/muddle
+        platforms: [darwin, linux]
+  
+  run:
+    deps: [build]
+    cmds:
+      - cmd: ./build/muddle.exe -d ../terris-mudlet
+        platforms: [windows]
+      - cmd: ./build/muddle -d ../terris-mudlet
+        platforms: [darwin, linux]

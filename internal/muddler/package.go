@@ -1,4 +1,4 @@
-package mpackage
+package muddler
 
 type Package interface {
 	Read() error

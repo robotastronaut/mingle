@@ -1,4 +1,4 @@
-package mpackage
+package muddler
 
 // Trigger represents the Muddler spec for a Mudlet Trigger
 // See: https://github.com/demonnic/muddler/wiki/Triggers

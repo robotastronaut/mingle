@@ -1,4 +1,4 @@
-package mpackage
+package muddler
 
 import (
 	"encoding/json"
@@ -16,7 +16,7 @@ type Module struct {
 	OutputFile  bool   `json:"outputFile"`
 
 	// A filesystem interface that should be rooted at `_path`
-	_root string
+	Path string `json:"-"`
 }
 
 func (m *Module) Save() error {
@@ -25,7 +25,7 @@ func (m *Module) Save() error {
 		return err
 	}
 
-	err = os.WriteFile(filepath.Join(m._root, "mfile"), d, 0666)
+	err = os.WriteFile(filepath.Join(m.Path, "mfile"), d, 0666)
 	if err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func loadModuleAt(path string) (*Module, error) {
 		return nil, err
 	}
 
-	m._root = path
+	m.Path = path
 	return &m, nil
 }
 

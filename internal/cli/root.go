@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/robotastronaut/mingle/internal/mpackage"
+	"github.com/robotastronaut/mingle/internal/muddler"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ func Root() *cobra.Command {
 			}
 
 			// Get config and print
-			module, err := mpackage.FindModule(workdir)
+			module, err := muddler.FindModule(workdir)
 
 			if err != nil {
 				return err

@@ -4,9 +4,8 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cli
 
 import (
-	"log"
+	"os"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
 
@@ -28,17 +27,27 @@ func AddInitCmd(parent *cobra.Command) *cobra.Command {
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// whatever
-			p := tea.NewProgram(initialTUIModel())
-
-			if _, err := p.Run(); err != nil {
-				log.Fatal(err)
+			workdir, err := os.Getwd()
+			if err != nil {
+				return err
 			}
 
-			// runPrompt()
+			if len(args) > 0 && len(args[0]) > 0 {
+				workdir = args[0]
+			}
 
-			// Immediately use viper to save the file
-			// return modFile._viper.WriteConfigAs("mfile")
+			gen := Generator{
+				Path: workdir,
+			}
+
+			gen.Form().Run()
+
+			err = gen.Run()
+			if err != nil {
+				return err
+			}
+			// TODO: Check for cleanup
+
 			return nil
 		},
 	}

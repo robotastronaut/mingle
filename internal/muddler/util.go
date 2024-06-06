@@ -1,4 +1,4 @@
-package mpackage
+package muddler
 
 import (
 	"errors"
@@ -63,4 +63,25 @@ func FindRootFile(dir, name string) (string, error) {
 
 		dir = parent
 	}
+}
+
+func ResolvePath(path string) (string, error) {
+	usr, err := user.Current()
+	if err != nil {
+		return "", errors.New("unable to get current user to determine home directory")
+	}
+
+	if path == "" {
+		return "", errors.New("empty path")
+	}
+	// Fix for home directories
+	if path == "~" {
+		path = usr.HomeDir
+	}
+
+	if strings.HasPrefix(path, "~/") {
+		path = filepath.Join(usr.HomeDir, path[2:])
+	}
+
+	return filepath.Abs(path)
 }

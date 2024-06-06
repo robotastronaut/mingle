@@ -8,7 +8,6 @@ import (
 	"github.com/charmbracelet/bubbles/runeutil"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"golang.org/x/mod/semver"
 )
 
@@ -24,15 +23,8 @@ const (
 	titleInput
 )
 
-const (
-	hotPink  = lipgloss.Color("#FF06B7")
-	darkGray = lipgloss.Color("#767676")
-)
-
 var (
-	inputStyle    = lipgloss.NewStyle().Foreground(hotPink)
-	continueStyle = lipgloss.NewStyle().Foreground(darkGray)
-	packageRegex  = regexp.MustCompile("^[a-zA-Z0-9_-]+$")
+	packageRegex = regexp.MustCompile("^[a-zA-Z0-9_-]+$")
 )
 
 func nameValidator(s string) error {

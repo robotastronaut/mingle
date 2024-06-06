@@ -6,19 +6,16 @@ tasks:
       - main.go
       - go.mod
       - go.sum
-      - cmd/**/*.go
+      - internal/**/*.go
     generates:
-      - build/muddle
+      - build/mingle
     cmds:
-      - cmd: go build -o build/muddle.exe
+      - cmd: go build -o build/mingle.exe
         platforms: [windows]
-      - cmd: go build -o build/muddle
+      - cmd: go build -o build/mingle
         platforms: [darwin, linux]
   
-  run:
+  install:
     deps: [build]
     cmds:
-      - cmd: ./build/muddle.exe -d ../terris-mudlet
-        platforms: [windows]
-      - cmd: ./build/muddle -d ../terris-mudlet
-        platforms: [darwin, linux]
+      - cmd: go install

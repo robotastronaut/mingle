@@ -1,2 +1,2 @@
-# go-muddler
- Go implementation of demonnic/muddler
+# Mingle
+ Go implementation of [demonnic/muddler](https://github.com/demonnic/muddler)

@@ -1,34 +1,49 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 */
-package cmd
+package cli
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/robotastronaut/mingle/internal/mpackage"
 	"github.com/spf13/cobra"
 )
 
 func Root() *cobra.Command {
 	// rootCmd is the core Cobra command struct
 	rootCmd := &cobra.Command{
-		Use:   "muddler-go",
+		Use:   "mingle",
 		Short: "Go implementation of demonnic/muddler",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// Get config and print
-			c, err := LoadMFile()
+			workdir, err := os.Getwd()
 			if err != nil {
 				return err
 			}
 
-			fmt.Println(c.String())
+			if len(args) > 0 && len(args[0]) > 0 {
+				workdir = args[0]
+			}
+
+			// Get config and print
+			module, err := mpackage.FindModule(workdir)
+
+			if err != nil {
+				return err
+			} else {
+				fmt.Println(module)
+			}
+
+			// fmt.Println(c.String())
 
 			return nil
 		},
 	}
 
 	AddInitCmd(rootCmd)
+	AddEnvCmd(rootCmd)
 	return rootCmd
 }
 

@@ -7,11 +7,11 @@ package main
 import (
 	"os"
 
-	"github.com/robotastronaut/muddler-go/cmd"
+	"github.com/robotastronaut/mingle/internal/cli"
 )
 
 func main() {
-	err := cmd.Root().Execute()
+	err := cli.Root().Execute()
 	if err != nil {
 		os.Exit(1)
 	}

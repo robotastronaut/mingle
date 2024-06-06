@@ -1,4 +1,4 @@
-module github.com/robotastronaut/muddler-go
+module github.com/robotastronaut/mingle
 
 go 1.22.3
 

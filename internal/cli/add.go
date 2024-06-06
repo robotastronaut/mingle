@@ -1,7 +1,7 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 */
-package cmd
+package cli
 
 import (
 	"fmt"
@@ -9,7 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func AddCmd(parent *cobra.Command) *cobra.Command {
+// What a ridiculous name
+func AddAddCmd(parent *cobra.Command) *cobra.Command {
 	addCmd := &cobra.Command{
 		Use:   "add",
 		Short: "Add a new feature",

@@ -1,4 +1,4 @@
-package cmd
+package mpackage
 
 import (
 	"github.com/charmbracelet/lipgloss"
@@ -28,17 +28,6 @@ var (
 			Render
 
 	listItem = lipgloss.NewStyle().PaddingLeft(2).Render
-)
-
-type InitExampleOpt uint8
-
-const (
-	_ InitExampleOpt = iota
-	InitOptScript
-	InitOptAlias
-	InitOptTrigger
-	InitOptKey
-	InitOptTimer
 )
 
 type MFile struct {

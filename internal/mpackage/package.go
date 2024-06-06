@@ -1,4 +1,4 @@
-package cmd
+package mpackage
 
 type Package struct {
 	MFile MFile

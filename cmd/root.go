@@ -5,33 +5,19 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
 
-var modPath string
-
-// Root returns the base command when called without any subcommands
-// TODO: Validate path
 func Root() *cobra.Command {
 	// rootCmd is the core Cobra command struct
 	rootCmd := &cobra.Command{
 		Use:   "muddler-go",
 		Short: "Go implementation of demonnic/muddler",
 		Args:  cobra.MaximumNArgs(1),
-		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			_, err := os.Stat(modPath)
-			if err != nil {
-				return fmt.Errorf("invalid module path")
-			}
-			return nil
-		},
-		// Uncomment the following line if your bare application
-		// has an action associated with it:
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Get config and print
-			c, err := LoadMfile(modPath)
+			c, err := LoadMFile()
 			if err != nil {
 				return err
 			}
@@ -42,7 +28,6 @@ func Root() *cobra.Command {
 		},
 	}
 
-	rootCmd.PersistentFlags().StringVarP(&modPath, "directory", "D", ".", "root directory of module")
 	AddInitCmd(rootCmd)
 	return rootCmd
 }

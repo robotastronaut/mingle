@@ -9,6 +9,7 @@ tasks:
       - internal/**/*.go
     generates:
       - build/mingle
+      - build/mingle.exe
     cmds:
       - cmd: go build -o build/mingle.exe
         platforms: [windows]

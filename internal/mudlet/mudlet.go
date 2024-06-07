@@ -42,11 +42,32 @@ func GetMudlet() (Mudlet, error) {
 		if profileDirEntry.IsDir() {
 			// Get Packages
 			currentProfilePath := filepath.Join(profilesPath, profileDirEntry.Name())
-
-			m.Profiles = append(m.Profiles, Profile{
+			prof := Profile{
 				Name: profileDirEntry.Name(),
 				Path: currentProfilePath,
-			})
+			}
+
+			// Find packages
+			profileContents, err := os.ReadDir(currentProfilePath)
+			if err != nil {
+				return m, errors.New("unable to access Mudlet profile contents")
+			}
+
+			for _, profileItem := range profileContents {
+				if profileItem.IsDir() {
+					// check if it has an xml file matching the file path
+					packagePath := filepath.Join(currentProfilePath, profileItem.Name())
+					xmlPath := filepath.Join(packagePath, profileItem.Name()+".xml")
+					if _, err := os.Stat(xmlPath); err == nil {
+						prof.Packages = append(prof.Packages, Package{
+							_name: profileItem.Name(),
+							_path: packagePath,
+						})
+					}
+				}
+			}
+
+			m.Profiles = append(m.Profiles, prof)
 		}
 	}
 

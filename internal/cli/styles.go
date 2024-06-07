@@ -1,36 +1,60 @@
 package cli
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"errors"
+	"fmt"
+	"regexp"
 
-const (
-	// TODO: Detect term width and adjust
-	columnWidth = 30
-	lineWidth   = 80
+	"github.com/charmbracelet/bubbles/runeutil"
+	"github.com/charmbracelet/huh"
+	"github.com/charmbracelet/lipgloss"
+	"github.com/rogpeppe/go-internal/semver"
 )
 
 var (
-	// Colors
-	subtle    = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
-	highlight = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#7D56F4"}
-	special   = lipgloss.AdaptiveColor{Light: "#43BF6D", Dark: "#73F59F"}
-	hotPink   = lipgloss.Color("#FF06B7")
-	darkGray  = lipgloss.Color("#767676")
-
-	// Basic styles
-	inputStyle    = lipgloss.NewStyle().Foreground(hotPink)
-	continueStyle = lipgloss.NewStyle().Foreground(darkGray)
-
-	list = lipgloss.NewStyle().
-		MarginRight(2).
-		Height(8).
-		Width(lineWidth)
-
-	listHeader = lipgloss.NewStyle().
-			BorderStyle(lipgloss.NormalBorder()).
-			BorderBottom(true).
-			BorderForeground(subtle).
-			MarginRight(2).
-			Render
-
-	listItem = lipgloss.NewStyle().PaddingLeft(2).Render
+	packageRegex = regexp.MustCompile("^[a-zA-Z0-9_-]+$")
 )
+
+var (
+	theme     = huh.ThemeBase16()
+	container = lipgloss.
+			NewStyle().
+			Width(40).
+			BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("9")).
+			Padding(1)
+
+	header = theme.Focused.Title.
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderBottom(true).
+		BorderForeground(lipgloss.Color("6"))
+)
+
+func summaryLine(key, value string) string {
+	return fmt.Sprintf("%-20s %s\n", theme.Focused.Title.Render(key), value)
+}
+
+func summaryBlock(key, value string) string {
+	return fmt.Sprintf("%s\n%s\n", theme.Focused.Title.Render(key), value)
+}
+
+func nameValidator(s string) error {
+	if !packageRegex.MatchString(s) {
+		return errors.New("invalid name")
+	}
+
+	return nil
+}
+
+func semverValidator(s string) error {
+	if !semver.IsValid(s) {
+		return errors.New("invalid semver")
+	}
+
+	return nil
+}
+
+func blankSanitizer() runeutil.Sanitizer {
+	return runeutil.NewSanitizer(
+		runeutil.ReplaceTabs(""), runeutil.ReplaceNewlines(""))
+}

@@ -10,7 +10,8 @@ import (
 )
 
 func AddInitCmd(parent *cobra.Command) *cobra.Command {
-	// modFile := NewMFile()
+	gen := Generator{}
+	var nonInteractive bool
 	initCmd := &cobra.Command{
 		Use:   "init",
 		Short: "Initialize a new module",
@@ -36,11 +37,16 @@ func AddInitCmd(parent *cobra.Command) *cobra.Command {
 				workdir = args[0]
 			}
 
-			gen := Generator{
-				Path: workdir,
-			}
+			gen.Path = workdir
 
-			gen.Form().Run()
+			if !nonInteractive {
+				gen.Form().Run()
+				gen.Confirm().Run()
+
+				if !gen._ready {
+					return nil
+				}
+			}
 
 			err = gen.Run()
 			if err != nil {
@@ -54,21 +60,12 @@ func AddInitCmd(parent *cobra.Command) *cobra.Command {
 
 	parent.AddCommand(initCmd)
 
-	// initCmd.Flags().StringVarP(&modFile.Package, "package", "p", "", "package name")
-	// initCmd.MarkFlagRequired("package")
-	// modFile._viper.BindPFlag("package", initCmd.Flags().Lookup("package"))
-
-	// initCmd.Flags().StringVarP(&modFile.Version, "version", "v", "0.0.1", "package version")
-	// modFile._viper.BindPFlag("version", initCmd.Flags().Lookup("version"))
-
-	// initCmd.Flags().StringVarP(&modFile.Description, "description", "d", "", "package description")
-	// modFile._viper.BindPFlag("description", initCmd.Flags().Lookup("description"))
-
-	// initCmd.Flags().StringVarP(&modFile.Author, "author", "a", "", "package author")
-	// modFile._viper.BindPFlag("author", initCmd.Flags().Lookup("author"))
-
-	// initCmd.Flags().StringVarP(&modFile.Title, "title", "t", "", "package title")
-	// modFile._viper.BindPFlag("title", initCmd.Flags().Lookup("title"))
+	initCmd.Flags().StringVarP(&gen.Name, "package", "p", "", "Package name")
+	initCmd.Flags().StringVarP(&gen.Description, "description", "d", "", "Package description")
+	initCmd.Flags().StringVarP(&gen.Author, "author", "a", "", "Package author")
+	initCmd.Flags().StringVarP(&gen.Title, "title", "t", "", "Package title")
+	initCmd.Flags().BoolVarP(&gen.OutputFile, "watchable", "w", true, "Enable creation of Muddle watch file")
+	initCmd.Flags().BoolVarP(&nonInteractive, "noninteractive", "n", false, "Run in non-interactive mode")
 
 	return initCmd
 }

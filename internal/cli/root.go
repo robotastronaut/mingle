@@ -6,6 +6,8 @@ package cli
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/robotastronaut/mingle/internal/muddler"
 	"github.com/spf13/cobra"
@@ -33,10 +35,8 @@ func Root() *cobra.Command {
 			if err != nil {
 				return err
 			} else {
-				fmt.Println(module)
+				fmt.Println(summarizeModule(module))
 			}
-
-			// fmt.Println(c.String())
 
 			return nil
 		},
@@ -45,6 +45,24 @@ func Root() *cobra.Command {
 	AddInitCmd(rootCmd)
 	AddEnvCmd(rootCmd)
 	return rootCmd
+}
+
+func summarizeModule(m *muddler.Module) string {
+	summary := strings.Builder{}
+	summary.WriteString(header.Render("Package Summary"))
+	summary.WriteString("\n")
+	summary.WriteString(summaryLine("Path", m.Path))
+	summary.WriteString(summaryLine("Name", m.Package))
+	summary.WriteString(summaryLine("Title", m.Title))
+	summary.WriteString(summaryLine("Author", m.Author))
+	summary.WriteString(summaryLine("OutputFile", strconv.FormatBool(m.OutputFile)))
+	desc := m.Description
+	if desc == "" {
+		desc = "<empty>"
+	}
+	summary.WriteString(summaryBlock("Description", desc))
+
+	return summary.String()
 }
 
 /**

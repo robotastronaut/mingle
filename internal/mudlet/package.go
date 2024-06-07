@@ -1,5 +1,7 @@
 package mudlet
 
+import "path/filepath"
+
 // Temporary
 type Package struct {
 	_name string
@@ -12,6 +14,10 @@ func (p Package) Name() string {
 
 func (p Package) Path() string {
 	return p._path
+}
+
+func (p Package) ConfigPath() string {
+	return filepath.Join(p._path, p._name+".xml")
 }
 
 // func getPackagesInProfile(profileDir string) (packages []Package, err error) {

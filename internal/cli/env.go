@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/robotastronaut/mingle/internal/mudlet"
+	"github.com/robotastronaut/mpm/internal/mudlet"
 	"github.com/spf13/cobra"
 )
 

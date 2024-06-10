@@ -58,6 +58,8 @@ func GetMudlet() (Mudlet, error) {
 					// check if it has an xml file matching the file path
 					packagePath := filepath.Join(currentProfilePath, profileItem.Name())
 					xmlPath := filepath.Join(packagePath, profileItem.Name()+".xml")
+
+					// Again, if we can stat it, it's there, and that's good enough for now
 					if _, err := os.Stat(xmlPath); err == nil {
 						prof.Packages = append(prof.Packages, Package{
 							_name: profileItem.Name(),

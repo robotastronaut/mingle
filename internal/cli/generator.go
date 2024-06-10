@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/huh"
-	"github.com/robotastronaut/mingle/internal/muddler"
+	"github.com/robotastronaut/mpm/internal/muddler"
 )
 
 type GenerateOpt uint8

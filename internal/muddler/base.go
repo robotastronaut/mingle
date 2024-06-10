@@ -54,16 +54,16 @@ func (i *Item) LoadScript() error {
 }
 
 type items interface {
-	Scripts
+	Script
 }
 
-func loadItemManifestAt[T items](path string) (T, error) {
+func loadItemManifestAt[T items](path string) ([]T, error) {
 	file, err := os.ReadFile(filepath.Join(path, "mfile"))
 	if err != nil {
 		return nil, err
 	}
 
-	item := T{}
+	item := []T{}
 	err = json.Unmarshal(file, &item)
 	if err != nil {
 		return nil, err

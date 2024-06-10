@@ -5,17 +5,27 @@ package cli
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
 
-func ScriptCmd(parent *cobra.Command) *cobra.Command {
+func AddScriptCmd(parent *cobra.Command) *cobra.Command {
 	scriptCmd := &cobra.Command{
 		Use:   "script",
 		Short: "Add a new script",
 
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("script called")
+		RunE: func(cmd *cobra.Command, args []string) error {
+			pattern := ""
+			if len(args) > 0 {
+				pattern = args[0]
+			}
+			manifestPaths, err := filepath.Glob(pattern)
+			if err != nil {
+				return err
+			}
+			fmt.Println(manifestPaths)
+			return nil
 		},
 	}
 

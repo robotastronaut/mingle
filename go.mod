@@ -1,4 +1,4 @@
-module github.com/robotastronaut/mingle
+module github.com/robotastronaut/mpm
 
 go 1.22.3
 

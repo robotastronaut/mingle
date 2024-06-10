@@ -7,7 +7,7 @@ package main
 import (
 	"os"
 
-	"github.com/robotastronaut/mingle/internal/cli"
+	"github.com/robotastronaut/mpm/internal/cli"
 )
 
 func main() {

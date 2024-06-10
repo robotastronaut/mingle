@@ -9,14 +9,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/robotastronaut/mingle/internal/muddler"
+	"github.com/robotastronaut/mpm/internal/muddler"
 	"github.com/spf13/cobra"
 )
 
 func Root() *cobra.Command {
 	// rootCmd is the core Cobra command struct
 	rootCmd := &cobra.Command{
-		Use:   "mingle",
+		Use:   "mpm",
 		Short: "Go implementation of demonnic/muddler",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -37,13 +37,14 @@ func Root() *cobra.Command {
 			} else {
 				fmt.Println(summarizeModule(module))
 			}
-
+			fmt.Println("\nSCRIPTS: \n", module.Scripts)
 			return nil
 		},
 	}
 
 	AddInitCmd(rootCmd)
 	AddEnvCmd(rootCmd)
+	AddScriptCmd(rootCmd)
 	return rootCmd
 }
 

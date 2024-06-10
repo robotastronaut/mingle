@@ -1,25 +1,49 @@
 package muddler
 
+import (
+	"path/filepath"
+)
+
 type Script struct {
 	Item
 	EventHandlers []string `json:"eventHandlerList"`
+	Children      []Script `json:"children"`
 }
 
-type Scripts []Script
+type ScriptManifest struct {
+	Scripts []Script
 
-func LoadScripts(path string) ([]Script, error) {
-	scripts, err := loadItemManifestAt(path)
-	if err != nil {
-		return nil, err
+	// The path of this file
+	_path string
+	// This holds child manifests located in subdirectories
+	_children []ScriptManifest
+}
+
+func LoadScriptManifest(path string) (ScriptManifest, error) {
+	m := ScriptManifest{
+		_path: path,
 	}
 
-	// for _, script := range scripts {
+	scripts, err := loadItemManifestAt(path)
+	if err != nil {
+		return m, err
+	}
 
-	// 	err = script.LoadScript()
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// }
+	m.Scripts = scripts
 
-	return scripts, nil
+	childManifestPaths, err := filepath.Glob(filepath.Dir(path) + "/*/scripts.json")
+	if err != nil {
+		return m, err
+	}
+
+	for _, manifestPath := range childManifestPaths {
+		child, err := LoadScriptManifest(manifestPath)
+		if err != nil {
+			return m, err
+		}
+
+		m._children = append(m._children, child)
+	}
+
+	return m, nil
 }

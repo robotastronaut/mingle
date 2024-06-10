@@ -1,5 +1,8 @@
 version: '3'
 
+vars:
+  CMD: mpm
+
 tasks:
   build:
     sources:
@@ -8,13 +11,9 @@ tasks:
       - go.sum
       - internal/**/*.go
     generates:
-      - build/mingle
-      - build/mingle.exe
+      - ./build/{{.CMD}}{{exeExt}}
     cmds:
-      - cmd: go build -o build/mingle.exe
-        platforms: [windows]
-      - cmd: go build -o build/mingle
-        platforms: [darwin, linux]
+      - cmd: "go build -v -o ./build/{{.CMD}}{{exeExt}}"
   
   install:
     deps: [build]

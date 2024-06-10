@@ -16,7 +16,8 @@ type Module struct {
 	OutputFile  bool   `json:"outputFile"`
 
 	// A filesystem interface that should be rooted at `_path`
-	Path string `json:"-"`
+	Path    string         `json:"-"`
+	Scripts ScriptManifest `json:"-"`
 }
 
 func (m *Module) Save() error {
@@ -44,6 +45,16 @@ func loadModuleAt(path string) (*Module, error) {
 	err = json.Unmarshal(file, &m)
 	if err != nil {
 		return nil, err
+	}
+
+	manifestPath := filepath.Join(filepath.Dir(path), "src", "scripts", "scripts.json")
+	_, err = os.Stat(manifestPath)
+	if err == nil {
+		manifest, err := LoadScriptManifest(manifestPath)
+		if err != nil {
+			return nil, err
+		}
+		m.Scripts = manifest
 	}
 
 	m.Path = path
